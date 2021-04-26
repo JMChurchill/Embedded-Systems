@@ -1,5 +1,6 @@
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
 #include <chrono>
+#include <cstdio>
 #include <iterator>
 using namespace uop_msb_200;
 
@@ -88,4 +89,5 @@ void addSample(long long dur) {
 //Flashing LED 
 void heartBeat() {
     redLED = !redLED;
+    mainQueue.call(printf,"Main Thread Alive\n");
 }

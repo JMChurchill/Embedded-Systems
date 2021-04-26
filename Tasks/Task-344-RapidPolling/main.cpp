@@ -99,14 +99,16 @@ int main()
             disp = count;              
         }
 
+
         // LED
-        if (tm >= 250ms) {
+        if (tm >= 10ms*count) {
             greenLED = !greenLED;
             tmr.reset();
         }
         
         // Slow it down a bit (and debounce the switches)
         wait_us(50000);  
+
     }
 }
 

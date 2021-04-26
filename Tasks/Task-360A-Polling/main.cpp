@@ -23,7 +23,7 @@ int main() {
     while(1) { 
 
         //Flash the yellow
-        if (tmr.elapsed_time() >= 500ms) {
+        if (tmr.elapsed_time() >= 200ms) {
             yellow_led = !yellow_led;   
             tmr.reset();        
         }

@@ -8,6 +8,8 @@
 #define BTN2_PIN PG_1
 
 Ticker yellowTick;
+Ticker tick;
+
 DigitalOut  yellow_led(TRAF_YEL1_PIN);
 
 void toggleYellowISR() {

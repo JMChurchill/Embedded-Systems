@@ -1,5 +1,6 @@
 #include "mbed.h"
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include <cstdio>
 using namespace uop_msb_200;
 
 void countUp();
@@ -34,18 +35,22 @@ void countUp()
     //RED MEANS THE COUNT UP FUNCTION IS IN ITS CRITICAL SECTION
     green_led = 1;
     for (unsigned int n=0; n<N; n++) {
-        counterLock.lock();
-        counter++; 
-        counter++;
-        counter++;
-        counter++;
-        counter++;
-        counter++;
-        counter++;
-        counter++;
-        counter++;
-        counter++; 
-        counterLock.unlock();          
+        if (counterLock.trylock_for(5s)) {
+            counter++; 
+            counter++;
+            counter++;
+            counter++;
+            counter++;
+            counter++;
+            counter++;
+            counter++;
+            counter++;
+            counter++; 
+            counterLock.unlock();  
+        }else {
+            printf("Mutex deadlocked\n");
+            break;
+        }
     }  
     green_led = 0; 
     
@@ -57,18 +62,22 @@ void countDown()
     //YELLOW MEANS THE COUNT DOWN FUNCTION IS IN ITS CRITICAL SECTION
     yellow_led = 1;
     for (unsigned int n=0; n<N; n++) {
-        counterLock.lock();
-        counter--;
-        counter--;
-        counter--;
-        counter--;
-        counter--;
-        counter--;
-        counter--;
-        counter--;
-        counter--;
-        counter--;   
-        counterLock.unlock();        
+        if (counterLock.trylock_for(5s)) {
+            counter--;
+            counter--;
+            counter--;
+            counter--;
+            counter--;
+            counter--;
+            counter--;
+            counter--;
+            counter--;
+            counter--;   
+            counterLock.unlock();  
+        }else {
+            printf("Mutex deadlocked\n");
+            break;
+        }
     }
     yellow_led = 0;
     
@@ -105,14 +114,17 @@ int main() {
     backLight = 1;
     disp.locate(1, 0);
 
-    counterLock.lock(); //Pedantic, but setting an example :)
-    disp.printf("Counter=%Ld\n", counter);
+    //counterLock.lock(); //Pedantic, but setting an example :)
+    if (counterLock.trylock_for(5s) == true) {
+        disp.printf("Cccounter=%Ld\n", counter);
 
-    if (counter == 0) {
-        red_led = 0;   
+        if (counter == 0) {
+            red_led = 0;   
+        }
+        counterLock.unlock();   
+    } else {
+        disp.printf("Deadlocked\n");
     }
-    counterLock.unlock();   
-
     //Now wait forever
     while (true) {
         ThisThread::sleep_for(Kernel::wait_for_u32_forever);

@@ -40,6 +40,10 @@ Queue<message_t, 16> queue;
 // Call this on precise intervals
 void switchISR() {
     
+    //busy wait block
+    if (buttonA == 1) return;
+    //while (buttonB == 1);
+
     //Read sample - make a copy
     float sample = 0.01f*(float)(rand() % 100);
 

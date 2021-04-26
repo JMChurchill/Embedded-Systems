@@ -26,13 +26,30 @@ int main()
 
     while (true) {
 
-        //Wait for switch press and release (by BLOCKING)
-        while (SW2.read() == 0);
-        ledRed = !ledRed;
-        wait_us(300000);
 
-        while (SW2.read() == 1);
-        wait_us(300000);        
+        int sw2 = SW2.read();
+        int sw3 = SW3.read();
+        if (sw2 && sw3) {
+            ledGrn = !ledGrn;
+            ledRed = !ledRed;
+            wait_us(300000);        
+        }
+        else if (sw2) {
+            ledGrn = !ledGrn;
+            wait_us(300000);
+        }
+        else if (sw3) {
+            ledRed = !ledRed;
+            wait_us(300000);
+        }
+
+        //Wait for switch press and release (by BLOCKING)
+        // while (SW2.read() == 0);
+        // ledRed = !ledRed;
+        // wait_us(300000);
+
+        // while (SW2.read() == 1);
+        // wait_us(300000);        
 
         //Toggle Yellow LED
         ledYel = !ledYel;

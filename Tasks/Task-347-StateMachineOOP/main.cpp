@@ -1,6 +1,7 @@
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
 #include "SwitchTimerLedManager.hpp"
 #include <chrono>
+#include <functional>
 #include <ratio>
 using namespace uop_msb_200;
 using namespace chrono;
@@ -57,7 +58,25 @@ int main()
     }
 }
 
+class GrnLED{
+    private:
+        Timer _tmr;
+        DigitalOut _led;
+        microseconds _duration = 0ms;
+    public:
+        GrnLED(PinName pin, microseconds duration): _led(pin), _duration(duration){
+            _tmr.start();
+            _led = 0;
+        }
 
+
+    void Start(){
+        _tmr.start();
+    }
+    void Stop(){
+        _tmr.stop();
+    }
+};
 
 
 

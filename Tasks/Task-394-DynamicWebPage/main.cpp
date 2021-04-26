@@ -1,7 +1,3 @@
-/*#if !FEATURE_LWIP
-    #error [NOT_SUPPORTED] LWIP not supported for this target
-#endif
- */
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
 using namespace uop_msb_200;
 
